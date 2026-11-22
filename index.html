@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عالم فروتة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lemonada:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: loud, happy Egyptian street food — but calm to use on a phone in one hand.
+   IDEA: a fairground stall card: the ad plays like a stall screen, then one prize wheel.
+   PICTURE: the vertical food ad is the hero, framed like a phone-sized screen with a live price sticker.
+   COLOUR and TYPE: corn yellow dominant, ink black support, chili red accent; Lilita One for logo/numbers, Lemonada for Arabic.
+   LAYOUT: one column, three clear stops: watch → follow & spin → small extras. Nothing side by side except the two follow buttons. */
+:root{color-scheme:light dark;--y:#FFD23F;--y2:#FFC21A;--ink:#141210;--red:#E63A24;--bg:light-dark(#FFD23F,#141210);--txt:light-dark(#141210,#FFF6DA);--soft:light-dark(#FFF6DA,#1F1B16)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 'Lemonada',system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px}
+h2{margin:0;font-size:clamp(24px,6.5vw,30px);line-height:1.35;font-weight:700;text-wrap:balance}
+p{margin:0}
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--y);color:var(--ink);padding:18px 0 26px;border-bottom:5px solid var(--ink)}
+.rays{position:absolute;width:1300px;height:1300px;left:50%;top:-560px;margin-left:-650px;border-radius:50%;background:repeating-conic-gradient(from 0deg,var(--y2) 0 9deg,var(--y) 9deg 18deg);animation:spin 70s linear infinite;opacity:.9}
+.hero .wrap{position:relative}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{display:inline-flex;flex-direction:column;align-items:flex-end;direction:ltr;line-height:.86;transform:rotate(-4deg)}
+.logo b{font:400 38px 'Lilita One',sans-serif;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill}
+.logo .a{color:#fff;text-shadow:3px 3px 0 var(--red),6px 6px 0 var(--ink)}
+.logo .b{color:var(--red);text-shadow:4px 4px 0 var(--ink)}
+.place{background:var(--ink);color:var(--y);border-radius:999px;padding:4px 14px;font-weight:700;font-size:13px;white-space:nowrap}
+.screen{position:relative;margin:16px auto 0;width:min(100%,360px,calc(70vh * 9 / 16));aspect-ratio:9/16;border-radius:28px;overflow:hidden;border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);background:#FFE48A}
+.screen video,.screen img.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.screen img.poster{object-fit:contain;padding:14%}
+.sticker{position:relative;margin:14px auto 0;width:min(100%,360px);display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:3px solid var(--ink);border-radius:18px;box-shadow:4px 4px 0 var(--ink);padding:8px 14px;transition:transform .35s,opacity .35s}
+.sticker.swap{transform:translateY(8px);opacity:0}
+.sticker .n{font-weight:700;font-size:18px;line-height:1.4}
+.sticker .p{flex:none;background:var(--red);color:#fff;border-radius:12px;padding:2px 12px;font:400 26px 'Lilita One',sans-serif;direction:ltr;white-space:nowrap}
+.sticker .p small{font:600 13px 'Lemonada',sans-serif}
+.sound{position:absolute;bottom:10px;left:10px;width:40px;height:40px;border-radius:50%;border:3px solid var(--ink);background:#fff;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.sound svg{width:20px;height:20px}
+.cta{display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;margin-top:22px;border-radius:999px;background:var(--ink);color:var(--y);font:700 19px 'Lemonada',sans-serif;text-decoration:none;box-shadow:0 5px 0 var(--red)}
+/* play */
+.play{background:var(--ink);color:#FFF6DA;padding:34px 0 38px}
+.play h2{color:var(--y);text-align:center}
+.sub{text-align:center;font-size:15px;margin-top:6px;opacity:.9}
+.follow{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:20px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;border-radius:18px;border:3px solid var(--y);background:transparent;color:#FFF6DA;font:700 16px 'Lemonada',sans-serif;text-decoration:none;cursor:pointer}
+.btn.done{background:var(--y);color:var(--ink)}
+.btn svg{width:22px;height:22px;flex:none}
+.already{display:block;margin:6px auto 0;background:none;border:0;color:var(--y);font:600 14px 'Lemonada',sans-serif;text-decoration:underline;cursor:pointer;min-height:44px}
+.wheelbox{position:relative;width:min(86vw,340px);aspect-ratio:1;margin:18px auto 0}
+.wheelbox>svg{width:100%;height:100%;display:block}
+#wheel{transform-origin:50% 50%;transition:transform 4.6s cubic-bezier(.12,.75,.12,1)}
+.wheelbox>svg.pointer{position:absolute;top:-10px;left:50%;margin-left:-17px;width:34px;height:30px;z-index:2}
+.lock{position:absolute;inset:0;border-radius:50%;background:rgba(20,18,16,.8);display:grid;place-items:center;text-align:center;padding:34px;font-weight:700;font-size:16px;z-index:3}
+.spin{display:flex;text-decoration:none;align-items:center;justify-content:center;width:100%;margin-top:22px;min-height:58px;border-radius:999px;border:0;background:var(--red);color:#fff;font:700 20px 'Lemonada',sans-serif;cursor:pointer;box-shadow:0 5px 0 var(--y)}
+.spin:disabled{opacity:.45;cursor:not-allowed}
+.result{margin-top:20px;background:var(--y);color:var(--ink);border-radius:24px;border:4px solid #fff;padding:18px;text-align:center}
+.result[hidden]{display:none}
+.prize{font-size:clamp(22px,6.5vw,28px);font-weight:700;line-height:1.4}
+.code{display:inline-block;margin-top:8px;font:400 30px 'Lilita One',sans-serif;letter-spacing:2px;background:var(--ink);color:var(--y);padding:2px 18px;border-radius:12px;direction:ltr}
+.clock{margin-top:8px;font-size:14px;font-weight:600}
+.small{font-size:13px;margin-top:6px}
+.wform{margin-top:18px;background:#FFF6DA;color:var(--ink);border-radius:22px;padding:16px;text-align:right}
+.wform label{display:block;font-weight:700;font-size:14px;margin:2px 0 6px}
+.wform input[type=tel],.wform input[type=text]{width:100%;min-height:52px;border-radius:14px;border:3px solid var(--ink);padding:0 14px;font:700 18px 'Lemonada',sans-serif;background:#fff;color:var(--ink);margin-bottom:12px}
+.wform input[type=tel]{direction:ltr;text-align:right}
+.wform input[type=text]{font-weight:500;font-size:16px}
+.wok{display:flex!important;gap:10px;align-items:flex-start;font-size:13px!important;font-weight:600!important;line-height:1.6}
+.wok input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--red)}
+.werr{color:var(--red);font-weight:700;font-size:14px;min-height:22px;margin-top:6px}
+.wform[hidden]{display:none}
+/* extras */
+.extras{background:var(--soft);padding:30px 0 34px}
+.card{background:light-dark(#fff,#2A251F);border:3px solid var(--ink);border-radius:22px;box-shadow:5px 5px 0 var(--ink);padding:18px}
+.card+.card{margin-top:18px}
+.card p{margin-top:8px;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{background:var(--y);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;font-weight:700;font-size:13px}
+.tag{display:inline-block;margin-top:10px;background:var(--red);color:#fff;border-radius:10px;padding:2px 12px;font-weight:700;direction:ltr}
+footer{background:var(--ink);color:var(--y);text-align:center;padding:20px 16px;font-weight:600;font-size:14px}
+footer b{font:400 22px 'Lilita One',sans-serif;letter-spacing:1px}
+.cta:focus-visible,.btn:focus-visible,.spin:focus-visible,.sound:focus-visible,.already:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.rays{animation:none}#wheel{transition-duration:.6s}}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="rays" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="top">
+      <div class="logo" aria-label="FROTA CORN"><b class="a">FROTA</b><b class="b">CORN</b></div>
+      <span class="place">الفلل — الزقازيق</span>
+    </div>
+    <div class="screen">
+      <img class="poster" src="mix.webp" alt="">
+      <video id="ad" src="frota-ad.mp4" poster="poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="إعلان فروتة: الدرة وهي بتتغرق زبدة وصوصات"></video>
+      <button class="sound" id="sound" type="button" aria-label="شغّل الصوت">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path id="wave" d="M17 9l4 6M21 9l-4 6"/></svg>
+      </button>
+    </div>
+    <div class="sticker" id="sticker"><span class="n" id="sn">الوحش: شيدر وباربكيو ودوريتوس</span><span class="p" id="sp">75 <small>ج</small></span></div>
+    <a class="cta" href="#play">لف العجلة واكسب</a>
+  </div>
+</section>
+
+<section class="play" id="play">
+  <div class="wrap">
+    <h2>لف عجلة فروتة</h2>
+    <p class="sub">سجّل اسمك ورقمك ولف. لفة واحدة لكل رقم في اليوم.</p>
+    <div class="follow">
+      <a class="btn" id="tt" href="https://www.tiktok.com/@froota.corn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.6 2.4 4.4 5 4.6"/></svg>
+        <span>تابعنا على تيك توك</span></a>
+    </div>
+    <div class="wheelbox">
+      <svg class="pointer" viewBox="0 0 34 30" aria-hidden="true"><path d="M3 3 H31 L17 27 Z" fill="#E63A24" stroke="#FFF6DA" stroke-width="3" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 300 300" role="img" aria-label="عجلة الجوايز"><g id="wheel"></g><circle cx="150" cy="150" r="146" fill="none" stroke="#FFD23F" stroke-width="8"/><circle cx="150" cy="150" r="26" fill="#141210" stroke="#FFD23F" stroke-width="5"/><text x="150" y="156" text-anchor="middle" font-family="Lilita One" font-size="15" fill="#FFD23F">FROTA</text></svg>
+    </div>
+    <form class="wform" id="wf" novalidate>
+      <label for="ph">رقم موبايلك</label>
+      <input id="ph" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01xxxxxxxxx" maxlength="11" required>
+      <label for="nm">اسمك الثلاثي</label>
+      <input id="nm" type="text" autocomplete="name" maxlength="60" placeholder="مثال: أحمد محمد علي" required>
+      <label class="wok"><input id="ok" type="checkbox"> <span>موافق إن فروتة تحتفظ برقمي وتبعتلي عروضها. مش هنديه لحد.</span></label>
+      <div class="werr" id="err" role="alert"></div>
+      <button class="spin" id="spin" type="submit">لف العجلة!</button>
+    </form>
+    <div class="result" id="result" hidden aria-live="polite">
+      <div class="prize" id="prize"></div>
+      <div class="code" id="code"></div>
+      <div class="clock" id="clock"></div>
+      <p class="small" id="note">ورّي الشاشة دي للي على العربية. صالحة النهارده بس، مع أي طلب.</p>
+    </div>
+  </div>
+</section>
+
+<section class="extras">
+  <div class="wrap">
+    <div class="card">
+      <h2>كوباية بتحب عينيك</h2>
+      <p>الدرة المسلوقة فيها لوتين وزياكسانثين، مضادات أكسدة معروفة إنها بتحمي العين، وكمان ألياف بتريّح الهضم.</p>
+      <div class="chips"><span class="chip">لوتين للعين</span><span class="chip">ألياف للهضم</span></div>
+    </div>
+    <div class="card">
+      <h2>تحدي فروتة</h2>
+      <p>صوّر نفسك وإنت بتاكل كوباية متغرقة ومنشن حسابنا. أحلى فيديو كل أسبوع ياخد كوباية ببلاش.</p>
+      <span class="tag">#تحدي_فروتة</span>
+    </div>
+  </div>
+</section>
+
+<footer><b>FROTA CORN</b><div>الفلل — الزقازيق</div></footer>
+
+<script>
+{
+  const $=id=>document.getElementById(id);
+  /* ad: price sticker follows the clip on screen */
+  const ad=$('ad'),st=$('sticker');
+  const SCENES=[{t:0,n:'الوحش: شيدر وباربكيو ودوريتوس',p:'75'},{t:11.73,n:'الكلاسيك: زبدة وبهارات · الكبير 50',p:'40'},{t:21.47,n:'الحامي: شطة وليمون · الكبير 50',p:'40'},{t:31.2,n:'لف العجلة تحت واكسب ↓',p:'ببلاش'}];
+  let cur=0;
+  const setScene=i=>{if(i===cur)return;cur=i;st.classList.add('swap');setTimeout(()=>{const s=SCENES[i];$('sn').textContent=s.n;$('sp').innerHTML=s.p==='ببلاش'?'<small style="font-size:17px">ببلاش</small>':s.p+' <small>ج</small>';st.classList.remove('swap')},250)};
+  ad.addEventListener('timeupdate',()=>{let i=0;SCENES.forEach((s,k)=>{if(ad.currentTime>=s.t)i=k});setScene(i)});
+  ad.addEventListener('error',()=>{ad.style.display='none';$('sound').style.display='none'});
+  $('sound').addEventListener('click',()=>{ad.muted=!ad.muted;$('wave').setAttribute('d',ad.muted?'M17 9l4 6M21 9l-4 6':'M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11');$('sound').setAttribute('aria-label',ad.muted?'شغّل الصوت':'اكتم الصوت');ad.play().catch(()=>{})});
+
+  /* wheel */
+  const PRIZES=[
+    {t:'حظ أوفر… لف بكرة',s:'لف بكرة',w:40,c:'#141210',f:'#FFD23F',win:false},
+    {t:'صوص زيادة ببلاش',s:'صوص زيادة',w:20,c:'#FFD23F',f:'#141210',win:true},
+    {t:'دوريتوس ببلاش على طلبك',s:'دوريتوس',w:20,c:'#E63A24',f:'#FFFFFF',win:true},
+    {t:'خصم 5 جنيه على طلبك',s:'خصم 5 ج',w:15,c:'#FFF6DA',f:'#141210',win:true},
+    {t:'كوباية زبدة وبهارات وسط ببلاش!',s:'كوباية ببلاش',w:5,c:'#E63A24',f:'#FFFFFF',win:true}
+  ];
+  const wheel=$('wheel'),seg=360/PRIZES.length;
+  const pt=(a,r)=>{const rad=(a-90)*Math.PI/180;return [150+r*Math.cos(rad),150+r*Math.sin(rad)]};
+  wheel.innerHTML=PRIZES.map((p,i)=>{const a0=i*seg,[x0,y0]=pt(a0,146),[x1,y1]=pt(a0+seg,146),mid=a0+seg/2;
+    return `<path d="M150 150 L${x0} ${y0} A146 146 0 0 1 ${x1} ${y1} Z" fill="${p.c}" stroke="#141210" stroke-width="2"/><text transform="rotate(${mid} 150 150)${mid>90&&mid<270?' rotate(180 150 66)':''}" x="150" y="66" text-anchor="middle" dominant-baseline="middle" font-family="Lemonada" font-weight="700" font-size="15" fill="${p.f}">${p.s}</text>`}).join('');
+  const API='https://script.google.com/macros/s/AKfycbzsNEQhwb31vangHcsbULZo8SjB_QyJA_17eDW1qD8JHGiikotDF80aLjsx0S28eHw6/exec';
+  let turned=0;
+  const tick=()=>{$('clock').textContent='الوقت دلوقتي: '+new Date().toLocaleString('ar-EG',{timeZone:'Africa/Cairo',hour:'2-digit',minute:'2-digit',second:'2-digit',day:'numeric',month:'numeric',year:'numeric'})};
+  const showR=r=>{$('prize').textContent=r.already?('إنت لفيت النهارده: '+r.prize):(r.win?'مبروك! '+r.prize:r.prize);$('code').textContent=r.code;$('code').style.display=r.win?'inline-block':'none';$('note').style.display=r.win?'block':'none';$('result').hidden=false;tick();setInterval(tick,1000);$('result').scrollIntoView({behavior:'smooth',block:'center'})};
+  const land=i=>{turned+=360*6+(360-(i*seg+seg/2))-(turned%360)+(Math.random()*seg*.6-seg*.3);wheel.style.transform=`rotate(${turned}deg)`};
+  const reset=()=>{$('spin').disabled=false;$('spin').textContent='لف العجلة!'};
+  $('wf').addEventListener('submit',e=>{
+    e.preventDefault();$('err').textContent='';
+    const ph=$('ph').value.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[\s-]/g,'');
+    const nm=$('nm').value.trim().replace(/\s+/g,' ');
+    if(!/^01[0125]\d{8}$/.test(ph)){$('err').textContent='اكتب رقم موبايلك 11 رقم يبدأ بـ 01.';$('ph').focus();return}
+    if(nm.split(' ').filter(w=>w.length>=2).length<3){$('err').textContent='اكتب اسمك ثلاثي (3 أسامي).';$('nm').focus();return}
+    if(!$('ok').checked){$('err').textContent='لازم توافق الأول عشان تلف.';return}
+    $('spin').disabled=true;$('spin').textContent='ثانية…';
+    $('wheel').scrollIntoView({behavior:'smooth',block:'center'});
+    fetch(API,{method:'POST',body:JSON.stringify({phone:ph,name:nm})}).then(x=>x.json()).then(r=>{
+      if(r.error){$('err').textContent=r.error;reset();return}
+      $('wf').hidden=true;
+      if(r.already){wheel.style.transition='none';land(r.i);showR(r);return}
+      land(r.i);setTimeout(()=>showR(r),matchMedia('(prefers-reduced-motion: reduce)').matches?700:4800);
+    }).catch(()=>{$('err').textContent='النت فصل… جرّب تاني.';reset()});
+  });
+}
+</script>
+</body>
+</html>
